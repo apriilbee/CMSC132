@@ -11,6 +11,8 @@ package mps_132;
  */
 public class test {
     public static void main(String[] args) {
-        System.out.println("test");
+        System.out.println("Big Endian:");
+        System.out.println("Small Endian");
+        System.out.println("Learning git is fun!!");
     }
 }
