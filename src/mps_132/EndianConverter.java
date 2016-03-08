@@ -18,7 +18,7 @@ import java.util.Scanner;
  * @author April Dae Bation
  */
 
-public class MP1 {
+public class EndianConverter {
     private static Scanner read;
     private static String input;
     private static ArrayList<Object> inputs;
