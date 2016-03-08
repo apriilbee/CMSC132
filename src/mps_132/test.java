@@ -14,5 +14,6 @@ public class test {
         System.out.println("Big Endian:");
         System.out.println("Small Endian");
         System.out.println("Learning git is fun!!");
+        System.out.println("Hi there!");
     }
 }
