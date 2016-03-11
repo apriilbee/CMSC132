@@ -56,29 +56,58 @@ public class EndianConverter {
             addZeros();
         }
     }
-    
-     private static void processInteger(int input) {
+    //32 bit representation of integer
+    private static void processInteger(int input) {
         ArrayList x = new ArrayList();
-        if (input>=100){
-            while(input > 0){
-                x.add(input%100);
-                input/=100;
-            }
-        }
-        else
-            x.add(input);
-        
-        Collections.reverse(x);
-
-        for(int j=0; j<(4-x.size()); j++){
-            big_endian.add("0");
-        }
-
-        for(int k=0; k<x.size(); k++){
-            big_endian.add(x.get(k));
-        }
+        String bin = toBinary(input);
+        ArrayList BitRep = to32bitRep(bin);
+        System.out.println(BitRep.toString());
     }
-
+    
+    private static String toBinary(int input){
+        String bin = "";
+        String zeros = "";
+        StringBuilder binary = new StringBuilder();
+        int tmp = input;
+        while(tmp > 0){
+            bin += String.valueOf(tmp%2);
+            tmp = tmp/2;
+        }
+        binary.append(bin);
+        binary = binary.reverse();
+        for(int i = 32 - binary.length(); i>0; i--){
+            zeros += "0";
+        }
+        return zeros+binary;
+    }
+    
+    //converts binary to 32 bit representation of array
+    private static ArrayList to32bitRep(String output){
+        ArrayList<Integer> arr = new ArrayList<>();
+        int start = 0;
+        int end = 8;
+        while(end <= 32){
+            arr.add(toInt(output.substring(start, end)));
+            start += 8;
+            end += 8;
+        }
+        return arr;
+    }
+    
+    private static Integer toInt(String binary) {
+          int ans = 0;
+          int two = 1;
+          StringBuilder tmp = new StringBuilder();
+          tmp.append(binary);
+          tmp = tmp.reverse();
+          
+          for(int i=0; i<tmp.length(); i++){
+              ans += Character.getNumericValue(tmp.charAt(i))*two;
+              two *= 2;
+          }
+          return ans;
+    }
+    
     private static void processString(char[] array) {
         for(int j=0; j<array.length; j++){
             big_endian.add(array[j]);
