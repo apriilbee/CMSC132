@@ -23,12 +23,10 @@ public class EndianConverter {
     private static String input;
     private static ArrayList<Object> inputs;
     private static ArrayList<Object> big_endian;
-    private static ArrayList<Object> small_endian;
     
     public static void main(String[] args) throws FileNotFoundException {
         inputs = new ArrayList<>();
         big_endian = new ArrayList<>();
-        small_endian = new ArrayList<>();
         
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter file name:");
@@ -36,9 +34,7 @@ public class EndianConverter {
         read = new Scanner(new File(input));
         
         toBigEndian();
-        toSmallEndian();
         printBigEndian();
-        printSmallEndian();
     }
 
     private static void toBigEndian() {
@@ -60,8 +56,10 @@ public class EndianConverter {
     private static void processInteger(int input) {
         ArrayList x = new ArrayList();
         String bin = toBinary(input);
-        ArrayList BitRep = to32bitRep(bin);
-        System.out.println(BitRep.toString());
+        ArrayList<Integer> BitRep = to32bitRep(bin);
+        for(int i=0; i<BitRep.size(); i++){
+            big_endian.add(BitRep.get(i));
+        }
     }
     
     private static String toBinary(int input){
@@ -82,7 +80,7 @@ public class EndianConverter {
     }
     
     //converts binary to 32 bit representation of array
-    private static ArrayList to32bitRep(String output){
+    private static ArrayList<Integer> to32bitRep(String output){
         ArrayList<Integer> arr = new ArrayList<>();
         int start = 0;
         int end = 8;
@@ -115,53 +113,10 @@ public class EndianConverter {
         addZeros();
     }
     
-    private static void toSmallEndian() {
-        ArrayList cloned = (ArrayList) big_endian.clone();
-        int start = 0;
-        int end = 4;
-        for(int i=0; i<inputs.size();i++)
-            System.out.println(inputs.get(i));
-        System.out.println("\n");
-        
-        while(end <= big_endian.size()){
-            boolean flag = false;
-            List<Object> tmp = cloned.subList(start, end);
-
-            for(int i=0; i<tmp.size(); i++){
-                String tmp2 = String.valueOf(tmp.get(i));
-                if (tmp2.matches("[a-zA-Z]+")){
-                   flag = true;
-                }
-            }
-            if (flag == true)
-                Collections.reverse(tmp);
-            else{
-                //copy contents of tmp to tmp2 for checking purposes
-                List tmp2 = new ArrayList();
-                for(int i=0; i<tmp.size();i++)
-                    tmp2.add(tmp.get(i));
-                
-                tmp2.removeAll(Arrays.asList("0"));
-                String a = "";
-                for(int i=0; i<tmp2.size();i++){
-                    a +=  tmp2.get(i);
-                }
-                
-                if(!inputs.contains(a))
-                    Collections.reverse(tmp);
-                
-            }
-            small_endian.addAll(Arrays.asList(tmp));
-            
-            start+=4;
-            end+=4;
-       }
-    }
-    
     private static void printBigEndian() {
         System.out.println("\nBig Endian:\n");
         for(int i = 0; i < big_endian.size(); i++){
-            System.out.print(big_endian.get(i) + "    ");
+            System.out.print(big_endian.get(i) + "\t");
             if((i+1)%4==0){
                 System.out.println("");
             }
@@ -172,14 +127,5 @@ public class EndianConverter {
         while(big_endian.size()%4!=0)
             big_endian.add("0");
     }
-
-    private static void printSmallEndian() {
-        System.out.println("\nSmall Endian:\n");
-        for(int i = 0; i < small_endian.size(); i++){
-            List tmp = (List) small_endian.get(i);
-            for(int j = 0; j < tmp.size(); j++)
-                System.out.print(tmp.get(j) + "    ");
-            System.out.println("");
-        }
-    }
+    
 }
