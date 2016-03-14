@@ -26,8 +26,8 @@ public class main {
     
     public static void execute() throws FileNotFoundException{
         Converter converter = new Converter();
-        converter.toBigEndian(input);
-        converter.toSmallEndian(input);
+        Converter.toBigEndian(input);
+        Converter.toSmallEndian(input);
     }
     
 }
