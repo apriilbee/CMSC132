@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mps_132;
+package MP1;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -25,7 +25,6 @@ public class main {
     }
     
     public static void execute() throws FileNotFoundException{
-        Converter converter = new Converter();
         Converter.toBigEndian(input);
         Converter.toSmallEndian(input);
     }

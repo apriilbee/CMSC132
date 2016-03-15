@@ -30,15 +30,13 @@ public class Codeword {
         choice = scan.nextInt();
         
         success = choice==1 ? execute(input,1): execute(input,2);
+        //work on execute
         
     }
     public static boolean execute(String input, int parity) throws FileNotFoundException{
         String codeword = initializeCheckbits(input);
-        codeword = addCheckBits(input,codeword);
-        if(parity == 1){
-            
-            
-        }
+        codeword = addCheckBits(input,codeword, parity);
+        //work on addcheckbits
         return true;
     }
 
@@ -58,7 +56,7 @@ public class Codeword {
         return codeword; 
     }
 
-    private static String addCheckBits(String input, String codeword) {
+    private static String addCheckBits(String input, String codeword, int parity) {
         //convert index to very binary
         for(int i=0; i<codeword.length();i++){
             if(codeword.charAt(i)==' '){
