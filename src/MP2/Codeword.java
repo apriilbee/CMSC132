@@ -44,20 +44,35 @@ public class Codeword {
         adds space for check bits to powers of two that can fit in string
     */
     private static String initializeCheckbits(String input) {
-        int two = 1;
-        StringBuilder build = new StringBuilder();
-        int length = input.length();
+        int m = input.length();
+        int r = 0;
         
-        build.append(input);
-        
-        while(two<=length){
-            build.insert(two-1, " ");
-            two*=2;
+        // m + r + 1 <= 2^r
+        while((m+r)>Math.pow(2, r)){
+            r++;
+            System.out.println("m+r:" + (m+r) + "\tmathpow:" + Math.pow(2, r));
         }
         
-        String codeword = build.toString();
-        //System.out.println(codeword);
-        return codeword; 
+        int length = m+r;
+        StringBuilder build = new StringBuilder();
+        while(build.length()<length){
+            build.append(" ");
+        }
+        
+        int two = 1;
+        for(int i=0,j=0; i<build.length();i++){
+            if((two-1)==i){
+                two*=2;
+            }
+            else{
+                build.replace(i, i+1, String.valueOf(input.charAt(j)));
+                j++;
+                if(j>=input.length())
+                    break;
+            }    
+        }
+        
+        return build.toString(); 
     }
 
     /*
@@ -81,8 +96,8 @@ public class Codeword {
                         ctr++;
                 }
                 
-                if(parity == 1){cb = ctr%2==0 ? "0" : "1";}
-                else{cb = ctr%2==0 ? "1" : "0";}
+                if(parity == 1){cb = ctr%2==0 ? "1" : "0";}
+                else{cb = ctr%2==0 ? "0" : "1";}
                 
                 build.replace(i, i+1, cb);
                 index--;
@@ -109,7 +124,6 @@ public class Codeword {
             tmp = zero+tmp;
             binary.set(i, tmp);
         }
-        //System.out.println(binary.toString());
         return binary;
     }
     
