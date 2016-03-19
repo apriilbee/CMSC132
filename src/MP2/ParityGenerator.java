@@ -13,7 +13,7 @@ import java.util.Scanner;
  *
  * @author Admin
  */
-public class Codeword {
+public class ParityGenerator {
     //input: databits
     //output: databits + check bits
     
@@ -80,59 +80,34 @@ public class Codeword {
     */
     private static String addCheckBits(String input, String codeword, int parity) {
         StringBuilder build = new StringBuilder();
-        ArrayList<String> binary = toBinary(codeword);
-        
-        int index = countCheckbits(codeword);
         build.append(codeword);
         
-        for(int i=0; i<codeword.length(); i++){
-            if(codeword.charAt(i) == ' '){
+        for(int i=0; i<build.length(); i++){
+            char cb;
+            if(build.charAt(i)==' '){
                 int ctr=0;
-                String cb;
-                
-                for(int j=0; j<binary.size(); j++){
-                    String tmp = binary.get(j);
-                    if(tmp.charAt(index-1) == '1')
-                        ctr++;
+                int pos = i+1;
+                System.out.println(pos);
+                int tmp=pos;
+                for(int j=pos-1; j<build.length();){
+                    if(tmp!=0){
+                        System.out.print(build.charAt(j));
+                        if(build.charAt(j)=='1')
+                            ctr++;
+                        tmp--;
+                        j++;
+                    }
+                    else{
+                        tmp+=pos;
+                        j+=pos;
+                    }
                 }
                 
-                if(parity == 1){cb = ctr%2==0 ? "1" : "0";}
-                else{cb = ctr%2==0 ? "0" : "1";}
-                
-                build.replace(i, i+1, cb);
-                index--;
+                if(parity == 1){cb = ctr%2==0 ? '1' : '0';}
+                else{cb = ctr%2==0 ? '0' : '1';}
+                build.replace(i, i+1, String.valueOf(cb));
             }
         }
         return build.toString();
-    }
-
-    private static ArrayList<String> toBinary(String codeword) {
-        ArrayList<String> binary = new ArrayList<>();
-        int checkbits = countCheckbits(codeword);
-        
-        for(int i=0; i<codeword.length();i++){
-            if(codeword.charAt(i)!=' ')
-                binary.add(Integer.toBinaryString(i+1));
-        }
-        
-        for(int i=0; i<binary.size();i++){
-            String tmp = binary.get(i);
-            String zero = "";
-            while (zero.length() != (checkbits-tmp.length())){
-                zero += "0";
-            }
-            tmp = zero+tmp;
-            binary.set(i, tmp);
-        }
-        return binary;
-    }
-    
-    private static int countCheckbits(String codeword){
-        int cb = 0;
-        for(int i=0; i<codeword.length();i++){
-            if(codeword.charAt(i)==' ')
-                cb++;
-        }
-        return cb;
     }
 }
