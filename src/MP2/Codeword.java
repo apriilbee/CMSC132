@@ -20,7 +20,6 @@ public class Codeword {
     public static void main(String[] args) throws FileNotFoundException {
         String input;
         int choice;
-        boolean success;
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter data bits:");
         input = scan.nextLine();
@@ -28,14 +27,17 @@ public class Codeword {
         System.out.print("\nMenu \n1.Odd Parity \n2.Even Parity \n\nChoice: ");
         choice = scan.nextInt();
         
-        success = choice==1 ? execute(input,1): execute(input,2);
+        if (choice == 1)
+            execute(input,1);
+        else
+            execute(input,2);
     }
     
-    public static boolean execute(String input, int parity) throws FileNotFoundException{
+    public static String execute(String input, int parity) throws FileNotFoundException{
         String codeword = initializeCheckbits(input);
         codeword = addCheckBits(input,codeword, parity);
-        System.out.println(codeword);
-        return true;
+        System.out.println("\nCodeword:" + codeword);
+        return codeword;
     }
     
     /*
