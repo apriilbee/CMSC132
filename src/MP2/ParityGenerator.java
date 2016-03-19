@@ -14,9 +14,6 @@ import java.util.Scanner;
  * @author Admin
  */
 public class ParityGenerator {
-    //input: databits
-    //output: databits + check bits
-    
     public static void main(String[] args) throws FileNotFoundException {
         String input;
         int choice;
@@ -40,9 +37,6 @@ public class ParityGenerator {
         return codeword;
     }
     
-    /*
-        adds space for check bits to powers of two that can fit in string
-    */
     private static String initializeCheckbits(String input) {
         int m = input.length();
         int r = 0;
@@ -50,7 +44,6 @@ public class ParityGenerator {
         // m + r + 1 <= 2^r
         while((m+r)>Math.pow(2, r)){
             r++;
-            System.out.println("m+r:" + (m+r) + "\tmathpow:" + Math.pow(2, r));
         }
         
         int length = m+r;
@@ -75,9 +68,6 @@ public class ParityGenerator {
         return build.toString(); 
     }
 
-    /*
-        adds check bits according to parity
-    */
     private static String addCheckBits(String input, String codeword, int parity) {
         StringBuilder build = new StringBuilder();
         build.append(codeword);
@@ -91,7 +81,6 @@ public class ParityGenerator {
                 int tmp=pos;
                 for(int j=pos-1; j<build.length();){
                     if(tmp!=0){
-                        System.out.print(build.charAt(j));
                         if(build.charAt(j)=='1')
                             ctr++;
                         tmp--;

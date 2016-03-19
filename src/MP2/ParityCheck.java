@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  * @author Admin
  */
-public class HammingDistance {
+public class ParityCheck {
     public static void main(String[] args) throws FileNotFoundException {
         String input;
         int choice;
@@ -25,72 +25,89 @@ public class HammingDistance {
         System.out.print("\nMenu \n1.Odd Parity \n2.Even Parity \n\nChoice: ");
         choice = scan.nextInt();
         
-        boolean hasNoError = checkCodeword(input,1);
-        if(hasNoError)
-            System.out.println("\nCodeword has no error.");
-        else
-            System.out.println("\nCodeword has error.");
+        System.out.println(checkCodeword(input,choice));
+            
     }
     
      public static boolean checkCodeword(String input, int parity) throws FileNotFoundException{
-        ArrayList<String> binary = toBinary(input);
-        int two = 1;
-        int index = binary.get(0).length(); //index sa binary strings
+        StringBuilder build = new StringBuilder();
+        String databits = getDataBits(input);
+        String checkbits = getCheckBits(input);
+        build.append(input);
         
-        for(int i=0; i<input.length(); i++){
+        int two = 1;
+        int error = 0;
+        
+        boolean hasError = false;
+        for(int i=0; i<build.length(); i++){
+            char cb;
             if(i==(two-1)){
                 int ctr=0;
-                char cb;
+                int pos = i+1;
+                int tmp=pos;
                 
-                for(int j=0; j<binary.size(); j++){
-                    String tmp = binary.get(j);
-                    if(tmp.charAt(index-1) == '1')
-                        ctr++;
+                for(int j=pos-1; j<databits.length();){
+                    if(tmp!=0){
+                        if(databits.charAt(j)=='1')
+                            ctr++;
+                        tmp--;
+                        j++;
+                    }
+                    else{
+                        tmp+=pos;
+                        j+=pos;
+                    }
                 }
+                if(parity == 1){ cb = ctr%2==0 ? '1' : '0'; }
+                else { cb = ctr%2==0 ? '0' : '1';  }
                 
-                if(parity == 1){
-                    cb = ctr%2==0 ? '1' : '0';
+                if(cb != checkbits.charAt(i)){
+                    error += pos;
+                    hasError = true;
                 }
-                else {
-                    cb = ctr%2==0 ? '0' : '1';
-                }
-                
-                if(cb!=input.charAt(i)){
-                    return false; //pwede ra pd iprint tanan naay errors here
-                }
-                
                 two*=2;
-                index--;
+              
             }
         }
-        return true;
+        if(!hasError){
+            System.out.println("Data correct");
+            return true;
+        }
+        else {
+            System.out.println("\nError at: " + error);
+            return false;
+        }
+    }
+
+    private static String getDataBits(String input) {
+        StringBuilder tmp = new StringBuilder();
+        String databits = input;
+        tmp.append(databits);
+        int two = 1;
+        
+        for(int i=0; i<input.length();i++){
+            if(i==(two-1)){
+                tmp.replace(i, i+1, "?");
+                two*=2;
+            }
+        }
+        return tmp.toString();
     }
     
-    private static ArrayList<String> toBinary(String codeword) {
-        ArrayList<String> binary = new ArrayList<>();
+    private static String getCheckBits(String input) {
+        StringBuilder tmp = new StringBuilder();
+        String databits = input;
+        tmp.append(databits);
         int two = 1;
-        int count = 0;
         
-        for(int i=0; i<codeword.length();i++){
-            if(i!=(two-1)){
-                binary.add(Integer.toBinaryString(i+1));
+        for(int i=0; i<input.length();i++){
+            if(i==(two-1)){
+                two*=2;
             }
             else{
-                count++;
-                two*=2;
+                tmp.replace(i, i+1, "?");
             }
         }
-        
-        for(int i=0; i<binary.size();i++){
-            String tmp = binary.get(i);
-            String zero = "";
-            while (zero.length() != (count-tmp.length())){
-                zero += "0";
-            }
-            tmp = zero+tmp;
-            binary.set(i, tmp);
-        }
-        return binary;
+        return tmp.toString();
     }
-    
 }
